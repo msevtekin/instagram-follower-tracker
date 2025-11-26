@@ -115,9 +115,11 @@ export function UploadComponent({ onUpload, loading = false }: UploadComponentPr
         <p className="file-hint">Supported: .txt, .csv, .json (max 5MB)</p>
       </div>
 
+      <div className="divider">or</div>
+
       {/* Text Input */}
       <div className="text-input-section">
-        <h3>Or paste usernames directly</h3>
+        <h3>Paste usernames directly</h3>
         <textarea
           value={textInput}
           onChange={(e) => setTextInput(e.target.value)}

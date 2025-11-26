@@ -132,28 +132,30 @@ export function HistoryComponent({
               <span className="snapshot-date">{formatDate(snapshot.createdAt)}</span>
               <span className="snapshot-count">{snapshot.followerCount} followers</span>
             </div>
-            <button
-              className="export-btn"
-              onClick={(e) => {
-                e.stopPropagation();
-                onExport(snapshot.id);
-              }}
-              disabled={loading}
-              aria-label="Export snapshot as CSV"
-            >
-              Export
-            </button>
-            <button
-              className="delete-btn"
-              onClick={(e) => {
-                e.stopPropagation();
-                onDelete(snapshot.id);
-              }}
-              disabled={loading}
-              aria-label="Delete snapshot"
-            >
-              Delete
-            </button>
+            <div className="snapshot-actions">
+              <button
+                className="export-btn"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onExport(snapshot.id);
+                }}
+                disabled={loading}
+                aria-label="Export snapshot as CSV"
+              >
+                📥 Export
+              </button>
+              <button
+                className="delete-btn"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onDelete(snapshot.id);
+                }}
+                disabled={loading}
+                aria-label="Delete snapshot"
+              >
+                🗑️ Delete
+              </button>
+            </div>
           </li>
         ))}
       </ul>
