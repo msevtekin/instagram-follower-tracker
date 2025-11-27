@@ -6,7 +6,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { UploadComponent, InstagramScript } from './components/Upload';
-import { HistoryComponent } from './components/History';
+import { HistoryComponent, SnapshotDetail } from './components/History';
 import { ComparisonComponent } from './components/Comparison';
 import './index.css';
 
@@ -53,6 +53,7 @@ function App() {
   const [error, setError] = useState<string | null>(null);
   const [lastUploadCount, setLastUploadCount] = useState<number | null>(null);
   const [comparisonResult, setComparisonResult] = useState<ComparisonResult | null>(null);
+  const [viewingSnapshot, setViewingSnapshot] = useState<Snapshot | null>(null);
 
   // Save snapshots to localStorage whenever they change
   useEffect(() => {
@@ -268,6 +269,15 @@ function App() {
   const clearError = () => setError(null);
   const clearComparison = () => setComparisonResult(null);
 
+  const viewSnapshot = useCallback((id: string) => {
+    const snapshot = snapshots.find(s => s.id === id);
+    if (snapshot) {
+      setViewingSnapshot(snapshot);
+    }
+  }, [snapshots]);
+
+  const closeSnapshotView = () => setViewingSnapshot(null);
+
 
   return (
     <div className="dashboard">
@@ -329,6 +339,7 @@ function App() {
             onDeleteAll={removeAllSnapshots}
             onExport={exportSnapshot}
             onRename={renameSnapshot}
+            onView={viewSnapshot}
             loading={loading}
           />
         )}
@@ -338,6 +349,13 @@ function App() {
       {comparisonResult && (
         <div className="modal-overlay">
           <ComparisonComponent result={comparisonResult} onClose={clearComparison} />
+        </div>
+      )}
+
+      {/* Snapshot Detail Modal */}
+      {viewingSnapshot && (
+        <div className="modal-overlay">
+          <SnapshotDetail snapshot={viewingSnapshot} onClose={closeSnapshotView} />
         </div>
       )}
     </div>

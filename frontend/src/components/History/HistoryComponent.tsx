@@ -22,6 +22,7 @@ interface HistoryComponentProps {
   onDeleteAll: () => void;
   onExport: (id: string) => void;
   onRename: (id: string, newName: string) => void;
+  onView: (id: string) => void;
   loading?: boolean;
 }
 
@@ -33,6 +34,7 @@ export function HistoryComponent({
   onDeleteAll,
   onExport,
   onRename,
+  onView,
   loading = false,
 }: HistoryComponentProps) {
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -133,6 +135,17 @@ export function HistoryComponent({
               <span className="snapshot-count">{snapshot.followerCount} followers</span>
             </div>
             <div className="snapshot-actions">
+              <button
+                className="view-btn"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onView(snapshot.id);
+                }}
+                disabled={loading}
+                aria-label="View snapshot details"
+              >
+                👁️ View
+              </button>
               <button
                 className="export-btn"
                 onClick={(e) => {
