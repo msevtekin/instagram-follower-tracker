@@ -1,0 +1,25 @@
+{
+  "manifest_version": 3,
+  "name": "Instagram Follower Tracker",
+  "version": "1.0.0",
+  "description": "Track your Instagram followers - see who unfollowed you and new followers",
+  "permissions": [
+    "activeTab",
+    "storage",
+    "scripting",
+    "tabs"
+  ],
+  "host_permissions": [
+    "https://www.instagram.com/*"
+  ],
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://www.instagram.com/*"],
+      "js": ["content.js"],
+      "css": ["content.css"]
+    }
+  ]
+}

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Instagram Follower Tracker</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>📊 Follower Tracker</h1>
+      <button id="popout-btn" class="popout-btn" title="Open in new window">
+        ↗️
+      </button>
+    </header>
+
+    <!-- Profile Card (shown when on Instagram profile) -->
+    <div id="profile-card" class="profile-card" style="display: none;">
+      <img id="profile-avatar" class="profile-avatar" src="" alt="Profile">
+      <div class="profile-info">
+        <span id="profile-username" class="profile-username">@username</span>
+        <span id="profile-fullname" class="profile-fullname">Full Name</span>
+      </div>
+      <div id="profile-stats" class="profile-stats">
+        <div class="stat">
+          <span id="stat-followers" class="stat-value">-</span>
+          <span class="stat-label">Followers</span>
+        </div>
+        <div class="stat">
+          <span id="stat-following" class="stat-value">-</span>
+          <span class="stat-label">Following</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Not on Instagram warning -->
+    <div id="not-instagram" class="warning-box" style="display: none;">
+      <p>⚠️ Please open an Instagram profile page to use this extension.</p>
+    </div>
+
+    <nav class="tabs">
+      <button class="tab active" data-tab="extract">Extract</button>
+      <button class="tab" data-tab="history">History</button>
+      <button class="tab" data-tab="compare">Compare</button>
+      <button class="tab" data-tab="mutual">Mutual</button>
+    </nav>
+
+    <!-- Extract Tab -->
+    <div id="extract-tab" class="tab-content active">
+      <div class="info-box">
+        <p>📍 Open <strong>Followers</strong> or <strong>Following</strong> modal on Instagram first.</p>
+      </div>
+      
+      <div class="extract-type">
+        <label class="radio-label">
+          <input type="radio" name="extractType" value="followers" checked>
+          <span>👥 Followers</span>
+        </label>
+        <label class="radio-label">
+          <input type="radio" name="extractType" value="following">
+          <span>➡️ Following</span>
+        </label>
+      </div>
+
+      <div class="speed-control">
+        <div class="speed-header">
+          <span class="speed-label">⚡ Extraction Speed</span>
+          <span id="speed-value" class="speed-value">1.5s</span>
+        </div>
+        <div class="speed-slider-container">
+          <span class="speed-icon fast">🐇</span>
+          <input type="range" id="speed-slider" class="speed-slider" min="1" max="15" step="0.5" value="1.5">
+          <span class="speed-icon slow">🐢</span>
+        </div>
+        <div class="speed-hint">
+          <span class="hint-fast">Faster (risky)</span>
+          <span class="hint-slow">Slower (safer)</span>
+        </div>
+      </div>
+
+      <div id="extract-buttons">
+        <button id="extract-btn" class="primary-btn">
+          🚀 Extract Now
+        </button>
+      </div>
+      <div id="control-buttons" class="control-buttons" style="display: none;">
+        <button id="pause-btn" class="control-btn pause">
+          <span class="btn-icon">⏸️</span>
+          <span class="btn-text">Pause</span>
+        </button>
+        <button id="stop-btn" class="control-btn stop">
+          <span class="btn-icon">⏹️</span>
+          <span class="btn-text">Stop & Save</span>
+        </button>
+      </div>
+      <div id="extract-status" class="status"></div>
+      <div id="extract-progress" class="progress-container" style="display: none;">
+        <div class="progress-bar">
+          <div class="progress-fill"></div>
+        </div>
+        <span class="progress-text">0 found...</span>
+      </div>
+    </div>
+
+    <!-- History Tab -->
+    <div id="history-tab" class="tab-content">
+      <div class="history-header">
+        <div class="history-filters">
+          <button class="filter-btn active" data-filter="all">All</button>
+          <button class="filter-btn" data-filter="followers">Followers</button>
+          <button class="filter-btn" data-filter="following">Following</button>
+        </div>
+        <label class="import-btn" title="Import CSV">
+          📥 Import
+          <input type="file" id="csv-import" accept=".csv" style="display: none;">
+        </label>
+      </div>
+      <div id="snapshot-list" class="snapshot-list"></div>
+      <div id="empty-history" class="empty-state">
+        <p>No snapshots yet. Extract followers or import a CSV!</p>
+      </div>
+    </div>
+
+    <!-- Compare Tab -->
+    <div id="compare-tab" class="tab-content">
+      <div class="compare-selects">
+        <div class="select-group">
+          <label>Old Snapshot:</label>
+          <select id="old-snapshot"></select>
+        </div>
+        <div class="select-group">
+          <label>New Snapshot:</label>
+          <select id="new-snapshot"></select>
+        </div>
+      </div>
+      <button id="compare-btn" class="primary-btn">
+        🔍 Compare
+      </button>
+      <div id="compare-results" class="compare-results" style="display: none;"></div>
+    </div>
+
+    <!-- Mutual Tab (New!) -->
+    <div id="mutual-tab" class="tab-content">
+      <div class="info-box">
+        <p>🔄 Find who doesn't follow you back. Select a <strong>Followers</strong> and <strong>Following</strong> snapshot.</p>
+      </div>
+      <div class="compare-selects">
+        <div class="select-group">
+          <label>👥 Followers Snapshot:</label>
+          <select id="followers-snapshot"></select>
+        </div>
+        <div class="select-group">
+          <label>➡️ Following Snapshot:</label>
+          <select id="following-snapshot"></select>
+        </div>
+      </div>
+      <button id="mutual-btn" class="primary-btn">
+        🔍 Analyze
+      </button>
+      <div id="mutual-results" class="compare-results" style="display: none;"></div>
+    </div>
+  </div>
+
+  <!-- Edit Modal -->
+  <div id="edit-modal" class="modal" style="display: none;">
+    <div class="modal-content">
+      <h3>✏️ Edit Snapshot Name</h3>
+      <input type="text" id="edit-name-input" placeholder="Enter new name">
+      <div class="modal-actions">
+        <button id="edit-cancel" class="secondary-btn">Cancel</button>
+        <button id="edit-save" class="primary-btn">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
